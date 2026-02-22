@@ -1,10 +1,14 @@
 {
-  "java.configuration.updateBuildConfiguration": "interactive",
-  "java.format.settings.url": ".vscode/java-formatter.xml",
-  "java.format.settings.profile": "JavaConventions",
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
 
-  "xml.format.maxLineWidth": 120,
+  "ruff.configurationPreference": "filesystemFirst",
+  "ruff.configuration": "${workspaceFolder}/ruff.toml",
 
-  "[java]": { "editor.defaultFormatter": "redhat.java" },
-  "[xml]": { "editor.defaultFormatter": "redhat.vscode-xml" }
+  "ty.configurationFile": "${workspaceFolder}/ty.toml",
+
+  "evenBetterToml.formatter.columnWidth": 120,
+
+  "[python]": { "editor.defaultFormatter": "charliermarsh.ruff" },
+  "[toml]": { "editor.defaultFormatter": "tamasfe.even-better-toml" }
 }

@@ -2,13 +2,12 @@
   "recommendations": [
     "editorconfig.editorconfig",
 
-    /* Java */
-    "redhat.java",
-    "vscjava.vscode-java-dependency",
-    "vscjava.vscode-java-debug",
-    "vscjava.vscode-maven",
+    /* Python */
+    "ms-python.python",
+    "charliermarsh.ruff",
+    "astral-sh.ty",
 
-    /* XML */
-    "redhat.vscode-xml"
+    /* TOML */
+    "tamasfe.even-better-toml"
   ]
 }

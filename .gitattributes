@@ -1,15 +1,13 @@
-*            text=auto
-*.cmd        text eol=crlf
-*.java       text diff=java
-*.json       text
-*.properties text
-*.xml        text
+*      text=auto
+*.json text
+*.lock text
+*.py   text
+*.toml text
 
-.editorconfig  text
-.gitattributes text export-ignore
-.gitignore     text export-ignore
-.sdkmanrc      text
-mvnw           text eol=lf
+.editorconfig   text
+.gitattributes  text export-ignore
+.gitignore      text export-ignore
+.python-version text
 
 # Overrides
 .vscode/*.json linguist-language=jsonc

@@ -1,0 +1,29 @@
+[project]
+name = "file-transfer"
+version = "1.0.0"
+requires-python = ">=3.14"
+authors = [{ name = "Ken Borbe" }, { name = "Raphael Panaligan" }]
+# TODO: description = ""
+classifiers = [
+  "Private :: Do Not Upload",
+  "Development Status :: 7 - Inactive",
+  "Environment :: Console",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.14",
+  "Typing :: Typed",
+]
+
+[project.urls]
+Repository = "https://github.com/seoyunnie/nscom01-mcos.git"
+
+[project.scripts]
+client = "file_transfer.client:main"
+server = "file_transfer.server:main"
+
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"

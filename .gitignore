@@ -2,10 +2,9 @@
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
-!.vscode/java-formatter.xml
 
-# Maven
-target/
+# Python Tools
+.ruff_cache/
 
 # macOS
 **/.DS_Store
