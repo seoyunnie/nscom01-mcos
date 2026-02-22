@@ -1,0 +1,54 @@
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>seoyunnie.filetransfer</groupId>
+  <artifactId>filetransfer</artifactId>
+  <version>1.0.0</version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>25</maven.compiler.release>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.6.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>seoyunnie.filetransfer.FileTransfer</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <name>FileTransfer</name>
+  <!-- <description></description> -->
+  <inceptionYear>2026</inceptionYear>
+  <developers>
+    <developer>
+      <id>seoyunnie</id>
+      <name>Raphael Panaligan</name>
+      <organization>De La Salle University</organization>
+      <organizationUrl>https://www.dlsu.edu.ph/</organizationUrl>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Ken Borbe</name>
+      <organization>De La Salle University</organization>
+      <organizationUrl>https://www.dlsu.edu.ph/</organizationUrl>
+    </contributor>
+  </contributors>
+</project>

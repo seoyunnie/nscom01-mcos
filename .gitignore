@@ -1,0 +1,11 @@
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/java-formatter.xml
+
+# Maven
+target/
+
+# macOS
+**/.DS_Store

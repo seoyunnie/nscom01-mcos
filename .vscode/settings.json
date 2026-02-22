@@ -1,0 +1,10 @@
+{
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.format.settings.url": ".vscode/java-formatter.xml",
+  "java.format.settings.profile": "JavaConventions",
+
+  "xml.format.maxLineWidth": 120,
+
+  "[java]": { "editor.defaultFormatter": "redhat.java" },
+  "[xml]": { "editor.defaultFormatter": "redhat.vscode-xml" }
+}

@@ -1,0 +1,15 @@
+*            text=auto
+*.cmd        text eol=crlf
+*.java       text diff=java
+*.json       text
+*.properties text
+*.xml        text
+
+.editorconfig  text
+.gitattributes text export-ignore
+.gitignore     text export-ignore
+.sdkmanrc      text
+mvnw           text eol=lf
+
+# Overrides
+.vscode/*.json linguist-language=jsonc
