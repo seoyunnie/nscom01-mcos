@@ -30,7 +30,7 @@ class Server(Endpoint):
 
                 seq_num += 1
 
-        if not self.send_reliable(PacketType.FIN, seq_num):
+        if not self.send_reliable(PacketType.FIN, seq_num, b"EOF"):
             print("Failed to send FIN packet, download may be incomplete")
 
             self.send_abort(seq_num, "Failed to finalize download")
