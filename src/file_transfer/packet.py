@@ -1,5 +1,6 @@
 import enum
 import struct
+import zlib
 from typing import Final, Self
 
 
@@ -12,8 +13,11 @@ class PacketType(enum.IntEnum):
 
 
 class Packet:
-    HEADER_FORMAT = "!BIH"
+    HEADER_BASE_FORMAT = "!BIH"
+    HEADER_FORMAT = "!BIHI"
     HEADER_SIZE: Final[int] = struct.calcsize(HEADER_FORMAT)
+
+    CHECKSUM_MASK: Final[int] = (1 << 32) - 1
 
     type: PacketType
     sequence_num: int
@@ -27,7 +31,11 @@ class Packet:
         self.payload = payload
 
     def pack(self) -> bytes:
-        header = struct.pack(self.HEADER_FORMAT, self.type, self.sequence_num, self.payload_length)
+        header_base = struct.pack(self.HEADER_BASE_FORMAT, self.type, self.sequence_num, self.payload_length)
+
+        checksum = zlib.crc32(header_base + self.payload) & self.CHECKSUM_MASK
+
+        header = struct.pack(self.HEADER_FORMAT, self.type, self.sequence_num, self.payload_length, checksum)
 
         return header + self.payload
 
@@ -39,7 +47,15 @@ class Packet:
             raise ValueError(err_msg)
 
         header = data[: cls.HEADER_SIZE]
-        packet_type, seq_num, payload_len = struct.unpack(cls.HEADER_FORMAT, header)
+        packet_type, seq_num, payload_len, recv_checksum = struct.unpack(cls.HEADER_FORMAT, header)
         payload = data[cls.HEADER_SIZE : cls.HEADER_SIZE + payload_len]
+
+        header_base = struct.pack(cls.HEADER_BASE_FORMAT, packet_type, seq_num, payload_len)
+        expected_checksum = zlib.crc32(header_base + payload) & cls.CHECKSUM_MASK
+
+        if recv_checksum != expected_checksum:
+            err_msg = "Checksum mismatch"
+
+            raise ValueError(err_msg)
 
         return cls(PacketType(packet_type), seq_num, payload)

@@ -110,8 +110,6 @@ class Server(Endpoint):
                 data, client_addr = self.socket.recvfrom(self.BUFFER_SIZE)
                 self.addr = client_addr
 
-                print("Hello")
-
                 req = Packet.unpack(data)
 
                 if req.type == PacketType.SYN:
