@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import os
 import socket
@@ -133,3 +135,7 @@ def main() -> None:
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         Client(s, server_addr).request_action(action, filename)
+
+
+if __name__ == "__main__":
+    main()

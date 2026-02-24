@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import os
 import socket
@@ -163,3 +165,7 @@ def main() -> None:
             Server(s, addr).run()
         except KeyboardInterrupt:
             print("\nServer shutting down...")
+
+
+if __name__ == "__main__":
+    main()
