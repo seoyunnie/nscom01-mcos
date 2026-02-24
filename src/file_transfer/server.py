@@ -7,8 +7,12 @@ from file_transfer.packet import Packet, PacketType
 
 
 class Server(Endpoint):
+    FILENAME_PREFIX = "server_"
+
     def handle_download(self, filename: str) -> None:
-        if not os.path.exists(filename):
+        stored_filename = f"{self.FILENAME_PREFIX}{filename}"
+
+        if not os.path.exists(stored_filename):
             print(f"File '{filename}' not found, aborting download")
 
             self.send_abort(0, "File not found")
@@ -19,7 +23,7 @@ class Server(Endpoint):
 
         seq_num = 1
 
-        with open(filename, "rb") as f:
+        with open(stored_filename, "rb") as f:
             while chunk := f.read(self.CHUNK_SIZE):
                 if not self.send_reliable(PacketType.DATA, seq_num, chunk):
                     print(f"Failed to send chunk {seq_num}, aborting transfer")
@@ -42,7 +46,9 @@ class Server(Endpoint):
     def handle_upload(self, filename: str) -> None:
         print(f"Receiving file '{filename}' from {self.addr}...")
 
-        with open(f"server_{filename}", "wb") as f:
+        stored_filename = f"{self.FILENAME_PREFIX}{filename}"
+
+        with open(stored_filename, "wb") as f:
             seq_num = 1
 
             retries = 0
@@ -98,7 +104,7 @@ class Server(Endpoint):
 
                         self.socket.sendto(Packet(PacketType.ACK, seq_num - 1).pack(), self.addr)
 
-        print(f"File {filename} received successfully as server_{filename}")
+        print(f"File {filename} received successfully as {stored_filename}")
 
     def run(self) -> None:
         print(f"Server listening on {self.socket.getsockname()}...")

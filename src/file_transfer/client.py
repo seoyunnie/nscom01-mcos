@@ -7,6 +7,8 @@ from file_transfer.packet import Packet, PacketType
 
 
 class Client(Endpoint):
+    FILENAME_PREFIX = "client_"
+
     def upload_file(self, filename: str) -> None:
         if not os.path.exists(filename):
             print(f"File '{filename}' not found, aborting upload")
@@ -42,7 +44,9 @@ class Client(Endpoint):
     def download_file(self, filename: str) -> None:
         print(f"Downloading file '{filename}' from {self.addr}...")
 
-        with open(f"client_{filename}", "wb") as f:
+        downloaded_filename = f"{self.FILENAME_PREFIX}{filename}"
+
+        with open(downloaded_filename, "wb") as f:
             seq_num = 1
 
             retries = 0
@@ -98,7 +102,7 @@ class Client(Endpoint):
 
                         self.socket.sendto(Packet(PacketType.ACK, seq_num - 1).pack(), self.addr)
 
-        print(f"File {filename} downloaded successfully as client_{filename}")
+        print(f"File {filename} downloaded successfully as {downloaded_filename}")
 
     def request_action(self, cmd: str, filename: str) -> None:
         payload = f"{cmd}|{filename}".encode()
@@ -111,7 +115,7 @@ class Client(Endpoint):
         if cmd == "UPLOAD":
             self.upload_file(filename)
         elif cmd == "DOWNLOAD":
-            self.download_file("server_" + filename)
+            self.download_file(filename)
 
 
 def main() -> None:
