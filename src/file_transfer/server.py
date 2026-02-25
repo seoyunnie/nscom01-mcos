@@ -70,7 +70,7 @@ class Server(Endpoint):
 
                         self.socket.sendto(Packet(PacketType.ACK, packet.sequence_num).pack(), self.addr)
 
-                        return
+                        raise FileNotFoundError  # noqa: TRY301
 
                     if packet.sequence_num < seq_num:
                         self.socket.sendto(Packet(PacketType.ACK, packet.sequence_num).pack(), self.addr)
@@ -106,6 +106,11 @@ class Server(Endpoint):
                         print(f"Timeout waiting for chunk {seq_num}, retrying...")
 
                         self.socket.sendto(Packet(PacketType.ACK, seq_num - 1).pack(), self.addr)
+                except FileNotFoundError:
+                    if pathlib.Path(stored_filename).exists():
+                        os.remove(stored_filename)
+
+                    return
 
         print(f"File {filename} received successfully as {stored_filename}")
 

@@ -68,7 +68,7 @@ class Client(Endpoint):
 
                         self.socket.sendto(Packet(PacketType.ACK, packet.sequence_num).pack(), self.addr)
 
-                        return
+                        raise FileNotFoundError  # noqa: TRY301
 
                     if packet.sequence_num < seq_num:
                         self.socket.sendto(Packet(PacketType.ACK, packet.sequence_num).pack(), self.addr)
@@ -104,6 +104,11 @@ class Client(Endpoint):
                         print(f"Timeout waiting for chunk {seq_num}, retrying...")
 
                         self.socket.sendto(Packet(PacketType.ACK, seq_num - 1).pack(), self.addr)
+                except FileNotFoundError:
+                    if pathlib.Path(downloaded_filename).exists():
+                        os.remove(downloaded_filename)
+
+                    return
 
         print(f"File {filename} downloaded successfully as {downloaded_filename}")
 
