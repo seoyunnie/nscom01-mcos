@@ -123,11 +123,14 @@ class Client(Endpoint):
 def main() -> None:
     parser = argparse.ArgumentParser(description="UDP File Transfer Client")
     parser.add_argument(
-        "-s", "--server", default=socket.gethostbyname(socket.gethostname()), help="Server address (default: localhost)"
+        "-s",
+        "--server",
+        default=socket.gethostbyname(socket.gethostname()),
+        help="set the server IP address (default: localhost)",
     )
-    parser.add_argument("-p", "--port", type=int, default=9999, help="Server port (default: 9999)")
-    parser.add_argument("filename", help="Filename to upload/download")
+    parser.add_argument("-p", "--port", type=int, default=9999, help="set the port to send to (default: 9999)")
     parser.add_argument("operation", choices=["UPLOAD", "DOWNLOAD"], help="the operation to perform")
+    parser.add_argument("filename", help="the name of or path to the file to upload/download")
 
     args = parser.parse_args()
     server_addr: tuple[str, int] = (socket.gethostbyname(args.server), args.port)

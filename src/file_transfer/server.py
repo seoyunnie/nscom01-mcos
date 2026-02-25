@@ -151,7 +151,7 @@ def get_local_address() -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="UDP File Transfer Server")
-    parser.add_argument("-p", "--port", type=int, default=9999, help="Port to listen on (default: 9999)")
+    parser.add_argument("-p", "--port", type=int, default=9999, help="set the port to listen on (default: 9999)")
 
     args = parser.parse_args()
     port = args.port
