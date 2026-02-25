@@ -13,8 +13,8 @@ class PacketType(enum.IntEnum):
 
 
 class Packet:
-    HEADER_BASE_FORMAT = "!BIH"
-    HEADER_FORMAT = "!BIHI"
+    HEADER_BASE_FORMAT = "!BIH"  # Before checksum calculation
+    HEADER_FORMAT = HEADER_BASE_FORMAT + "I"
     HEADER_SIZE: Final[int] = struct.calcsize(HEADER_FORMAT)
 
     CHECKSUM_MASK: Final[int] = (1 << 32) - 1
