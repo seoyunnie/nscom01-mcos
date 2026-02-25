@@ -106,17 +106,17 @@ class Client(Endpoint):
 
         print(f"File {filename} downloaded successfully as {downloaded_filename}")
 
-    def request_action(self, cmd: str, filename: str) -> None:
-        payload = f"{cmd}|{filename}".encode()
+    def request_operation(self, op: str, filename: str) -> None:
+        payload = f"{op}|{filename}".encode()
 
         if not self.send_reliable(PacketType.SYN, 0, payload):
             print("Failed to send request, aborting")
 
             return
 
-        if cmd == "UPLOAD":
+        if op == "UPLOAD":
             self.upload_file(filename)
-        elif cmd == "DOWNLOAD":
+        elif op == "DOWNLOAD":
             self.download_file(filename)
 
 
@@ -126,15 +126,15 @@ def main() -> None:
         "-s", "--server", default=socket.gethostbyname(socket.gethostname()), help="Server address (default: localhost)"
     )
     parser.add_argument("-p", "--port", type=int, default=9999, help="Server port (default: 9999)")
-    parser.add_argument("action", choices=["UPLOAD", "DOWNLOAD"], help="Action to perform")
     parser.add_argument("filename", help="Filename to upload/download")
+    parser.add_argument("operation", choices=["UPLOAD", "DOWNLOAD"], help="the operation to perform")
 
     args = parser.parse_args()
     server_addr: tuple[str, int] = (socket.gethostbyname(args.server), args.port)
-    action, filename = args.action, args.filename
+    op, filename = args.operation, args.filename
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-        Client(s, server_addr).request_action(action, filename)
+        Client(s, server_addr).request_operation(op, filename)
 
 
 if __name__ == "__main__":
