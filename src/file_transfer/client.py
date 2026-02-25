@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import pathlib
 import socket
 
 from file_transfer.endpoint import Endpoint
@@ -12,7 +13,7 @@ class Client(Endpoint):
     FILENAME_PREFIX = "client_"
 
     def upload_file(self, filename: str) -> None:
-        if not os.path.exists(filename):
+        if not pathlib.Path(filename).exists():
             print(f"File '{filename}' not found, aborting upload")
 
             self.send_abort(0, "File not found")

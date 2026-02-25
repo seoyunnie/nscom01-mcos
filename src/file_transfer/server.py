@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import pathlib
 import socket
 
 from file_transfer.endpoint import Endpoint
@@ -14,7 +15,7 @@ class Server(Endpoint):
     def handle_download(self, filename: str) -> None:
         stored_filename = f"{self.FILENAME_PREFIX}{filename}"
 
-        if not os.path.exists(stored_filename):
+        if not pathlib.Path(stored_filename).exists():
             print(f"File '{filename}' not found, aborting download")
 
             self.send_abort(0, "File not found")
