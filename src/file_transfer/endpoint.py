@@ -45,8 +45,10 @@ class Endpoint:
                     print(f"Received error from {self.addr}: {ack_packet.payload.decode()}")
 
                     return False
-            except TimeoutError, ValueError:
+            except TimeoutError:
                 print(f"Attempt {attempt} failed for packet {packet_type.name} seq {seq_num}, retrying...")
+            except ValueError as e:
+                print(f"Received invalid packet from {self.addr}: {e}")
 
         return False
 
