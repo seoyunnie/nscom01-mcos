@@ -1,8 +1,9 @@
 [project]
-name = "nscom01-mcos"
+name = "file-transfer"
 version = "1.0.0"
 requires-python = ">=3.14"
 authors = [{ name = "Ken Borbe" }, { name = "Raphael Panaligan" }]
+description = "A simple CLI file transfer program implementing a UDP-based protocol."
 classifiers = [
   "Private :: Do Not Upload",
   "Development Status :: 7 - Inactive",
@@ -19,8 +20,10 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/seoyunnie/nscom01-mcos.git"
 
-[dependency-groups]
-dev = ["ruff>=0.15.7", "ty>=0.0.24"]
+[project.scripts]
+client = "file_transfer.client:main"
+server = "file_transfer.server:main"
 
-[tool.uv.workspace]
-members = ["mco1"]
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"
