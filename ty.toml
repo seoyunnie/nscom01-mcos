@@ -1,3 +1,2 @@
 [rules]
 division-by-zero = "error"
-unused-ignore-comment = "warn"
