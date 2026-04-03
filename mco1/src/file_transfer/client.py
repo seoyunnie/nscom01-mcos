@@ -12,6 +12,9 @@ from file_transfer.packet import Packet, PacketType
 class Client(Endpoint):
     FILENAME_PREFIX = "client_"
 
+    def __init__(self, socket: socket.socket, addr: tuple[str, int]) -> None:
+        super().__init__(socket, addr)
+
     def upload_file(self, filename: str) -> None:
         if not pathlib.Path(filename).exists():
             print(f"File '{filename}' not found, aborting upload")

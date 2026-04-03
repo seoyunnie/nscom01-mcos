@@ -16,10 +16,12 @@ class Endpoint:
     socket: socket.socket
     address: tuple[str, int]
 
-    def __init__(self, socket: socket.socket, addr: tuple[str, int]) -> None:
+    def __init__(self, socket: socket.socket, addr: tuple[str, int] | None = None) -> None:
         self.socket = socket
         self.socket.settimeout(self.TIMEOUT)
-        self.address = addr
+
+        if addr is not None:
+            self.address = addr
 
     def send_reliable(self, packet_type: PacketType, seq_num: int, payload: bytes = b"") -> bool:
         packet = Packet(packet_type, seq_num, payload).pack()

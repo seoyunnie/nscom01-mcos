@@ -12,6 +12,9 @@ from file_transfer.packet import Packet, PacketType
 class Server(Endpoint):
     FILENAME_PREFIX = "server_"
 
+    def __init__(self, socket: socket.socket) -> None:
+        super().__init__(socket)
+
     def handle_download(self, filename: str) -> None:
         stored_filename = f"{self.FILENAME_PREFIX}{filename}"
 
@@ -168,7 +171,7 @@ def main() -> None:
 
             s.bind(addr)
 
-            Server(s, addr).run()
+            Server(s).run()
         except KeyboardInterrupt:
             print("\nServer shutting down...")
 
