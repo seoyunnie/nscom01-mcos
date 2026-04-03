@@ -14,41 +14,41 @@ class Endpoint:
     MAX_RETRIES = 5
 
     socket: socket.socket
-    addr: tuple[str, int]
+    address: tuple[str, int]
 
     def __init__(self, socket: socket.socket, addr: tuple[str, int]) -> None:
         self.socket = socket
         self.socket.settimeout(self.TIMEOUT)
-        self.addr = addr
+        self.address = addr
 
     def send_reliable(self, packet_type: PacketType, seq_num: int, payload: bytes = b"") -> bool:
         packet = Packet(packet_type, seq_num, payload).pack()
 
         for attempt in range(1, self.MAX_RETRIES + 1):
             try:
-                self.socket.sendto(packet, self.addr)
+                self.socket.sendto(packet, self.address)
 
                 res, sender_addr = self.socket.recvfrom(self.BUFFER_SIZE)
 
-                if sender_addr != self.addr:
+                if sender_addr != self.address:
                     continue
 
                 ack_packet = Packet.unpack(res)
 
-                if ack_packet.sequence_num != seq_num:
+                if ack_packet.sequence_number != seq_num:
                     continue
 
                 if ack_packet.type == PacketType.ACK:
                     return True
 
                 if ack_packet.type == PacketType.ERROR:
-                    print(f"Received error from {self.addr}: {ack_packet.payload.decode()}")
+                    print(f"Received error from {self.address}: {ack_packet.payload.decode()}")
 
                     return False
             except TimeoutError:
                 print(f"Attempt {attempt} failed for packet {packet_type.name} seq {seq_num}, retrying...")
             except ValueError as e:
-                print(f"Received invalid packet from {self.addr}: {e}")
+                print(f"Received invalid packet from {self.address}: {e}")
 
         return False
 

@@ -20,13 +20,13 @@ class Packet:
     CHECKSUM_MASK: Final[int] = (1 << 32) - 1
 
     type: PacketType
-    sequence_num: int
+    sequence_number: int
     payload_length: int
     payload: bytes
 
     def __init__(self, packet_type: PacketType, seq_num: int, payload: bytes = b"") -> None:
         self.type = packet_type
-        self.sequence_num = seq_num
+        self.sequence_number = seq_num
         self.payload_length = len(payload)
         self.payload = payload
 
@@ -52,10 +52,10 @@ class Packet:
         return cls(PacketType(packet_type), seq_num, payload)
 
     def pack(self) -> bytes:
-        header_base = struct.pack(self.HEADER_BASE_FORMAT, self.type, self.sequence_num, self.payload_length)
+        header_base = struct.pack(self.HEADER_BASE_FORMAT, self.type, self.sequence_number, self.payload_length)
 
         checksum = zlib.crc32(header_base + self.payload) & self.CHECKSUM_MASK
 
-        header = struct.pack(self.HEADER_FORMAT, self.type, self.sequence_num, self.payload_length, checksum)
+        header = struct.pack(self.HEADER_FORMAT, self.type, self.sequence_number, self.payload_length, checksum)
 
         return header + self.payload

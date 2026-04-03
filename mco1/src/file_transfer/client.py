@@ -20,7 +20,7 @@ class Client(Endpoint):
 
             return
 
-        print(f"Uploading file '{filename}' to {self.addr}...")
+        print(f"Uploading file '{filename}' to {self.address}...")
 
         seq_num = 1
 
@@ -45,7 +45,7 @@ class Client(Endpoint):
         print(f"File {filename} uploaded successfully")
 
     def download_file(self, filename: str) -> None:
-        print(f"Downloading file '{filename}' from {self.addr}...")
+        print(f"Downloading file '{filename}' from {self.address}...")
 
         downloaded_filename = f"{self.FILENAME_PREFIX}{filename}"
 
@@ -58,27 +58,27 @@ class Client(Endpoint):
                 try:
                     data, sender_addr = self.socket.recvfrom(self.BUFFER_SIZE)
 
-                    if sender_addr != self.addr:
+                    if sender_addr != self.address:
                         continue
 
                     packet = Packet.unpack(data)
 
                     if packet.type == PacketType.ERROR:
-                        print(f"Received error from {self.addr}: {packet.payload.decode()}")
+                        print(f"Received error from {self.address}: {packet.payload.decode()}")
 
-                        self.socket.sendto(Packet(PacketType.ACK, packet.sequence_num).pack(), self.addr)
+                        self.socket.sendto(Packet(PacketType.ACK, packet.sequence_number).pack(), self.address)
 
                         raise FileNotFoundError  # noqa: TRY301
 
-                    if packet.sequence_num < seq_num:
-                        self.socket.sendto(Packet(PacketType.ACK, packet.sequence_num).pack(), self.addr)
+                    if packet.sequence_number < seq_num:
+                        self.socket.sendto(Packet(PacketType.ACK, packet.sequence_number).pack(), self.address)
 
                         continue
 
-                    if packet.type == PacketType.DATA and packet.sequence_num == seq_num:
+                    if packet.type == PacketType.DATA and packet.sequence_number == seq_num:
                         f.write(packet.payload)
 
-                        self.socket.sendto(Packet(PacketType.ACK, seq_num).pack(), self.addr)
+                        self.socket.sendto(Packet(PacketType.ACK, seq_num).pack(), self.address)
 
                         seq_num += 1
 
@@ -86,8 +86,8 @@ class Client(Endpoint):
 
                         continue
 
-                    if packet.type == PacketType.FIN and packet.sequence_num == seq_num:
-                        self.socket.sendto(Packet(PacketType.ACK, seq_num).pack(), self.addr)
+                    if packet.type == PacketType.FIN and packet.sequence_number == seq_num:
+                        self.socket.sendto(Packet(PacketType.ACK, seq_num).pack(), self.address)
 
                         break
                 except TimeoutError:
@@ -103,7 +103,7 @@ class Client(Endpoint):
                     if seq_num > 1:
                         print(f"Timeout waiting for chunk {seq_num}, retrying...")
 
-                        self.socket.sendto(Packet(PacketType.ACK, seq_num - 1).pack(), self.addr)
+                        self.socket.sendto(Packet(PacketType.ACK, seq_num - 1).pack(), self.address)
                 except FileNotFoundError:
                     if pathlib.Path(downloaded_filename).exists():
                         os.remove(downloaded_filename)

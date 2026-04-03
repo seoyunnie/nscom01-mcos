@@ -22,7 +22,7 @@ class Server(Endpoint):
 
             return
 
-        print(f"Sending file '{filename}' to {self.addr}...")
+        print(f"Sending file '{filename}' to {self.address}...")
 
         seq_num = 1
 
@@ -47,7 +47,7 @@ class Server(Endpoint):
         print(f"File {filename} sent successfully")
 
     def handle_upload(self, filename: str) -> None:
-        print(f"Receiving file '{filename}' from {self.addr}...")
+        print(f"Receiving file '{filename}' from {self.address}...")
 
         stored_filename = f"{self.FILENAME_PREFIX}{filename}"
 
@@ -60,25 +60,25 @@ class Server(Endpoint):
                 try:
                     data, sender_addr = self.socket.recvfrom(self.BUFFER_SIZE)
 
-                    if sender_addr != self.addr:
+                    if sender_addr != self.address:
                         continue
 
                     packet = Packet.unpack(data)
 
                     if packet.type == PacketType.ERROR:
-                        print(f"Received error from {self.addr}: {packet.payload.decode()}")
+                        print(f"Received error from {self.address}: {packet.payload.decode()}")
 
-                        self.socket.sendto(Packet(PacketType.ACK, packet.sequence_num).pack(), self.addr)
+                        self.socket.sendto(Packet(PacketType.ACK, packet.sequence_number).pack(), self.address)
 
                         raise FileNotFoundError  # noqa: TRY301
 
-                    if packet.sequence_num < seq_num:
-                        self.socket.sendto(Packet(PacketType.ACK, packet.sequence_num).pack(), self.addr)
+                    if packet.sequence_number < seq_num:
+                        self.socket.sendto(Packet(PacketType.ACK, packet.sequence_number).pack(), self.address)
 
                         continue
 
-                    if packet.type == PacketType.DATA and packet.sequence_num == seq_num:
-                        self.socket.sendto(Packet(PacketType.ACK, seq_num).pack(), self.addr)
+                    if packet.type == PacketType.DATA and packet.sequence_number == seq_num:
+                        self.socket.sendto(Packet(PacketType.ACK, seq_num).pack(), self.address)
 
                         f.write(packet.payload)
 
@@ -88,8 +88,8 @@ class Server(Endpoint):
 
                         continue
 
-                    if packet.type == PacketType.FIN and packet.sequence_num == seq_num:
-                        self.socket.sendto(Packet(PacketType.ACK, seq_num).pack(), self.addr)
+                    if packet.type == PacketType.FIN and packet.sequence_number == seq_num:
+                        self.socket.sendto(Packet(PacketType.ACK, seq_num).pack(), self.address)
 
                         break
                 except TimeoutError:
@@ -105,7 +105,7 @@ class Server(Endpoint):
                     if seq_num > 1:
                         print(f"Timeout waiting for chunk {seq_num}, retrying...")
 
-                        self.socket.sendto(Packet(PacketType.ACK, seq_num - 1).pack(), self.addr)
+                        self.socket.sendto(Packet(PacketType.ACK, seq_num - 1).pack(), self.address)
                 except FileNotFoundError:
                     if pathlib.Path(stored_filename).exists():
                         os.remove(stored_filename)
@@ -122,27 +122,27 @@ class Server(Endpoint):
                 self.socket.settimeout(None)
 
                 data, client_addr = self.socket.recvfrom(self.BUFFER_SIZE)
-                self.addr = client_addr
+                self.address = client_addr
 
                 req = Packet.unpack(data)
 
                 if req.type == PacketType.SYN:
-                    self.socket.sendto(Packet(PacketType.ACK, req.sequence_num).pack(), self.addr)
+                    self.socket.sendto(Packet(PacketType.ACK, req.sequence_number).pack(), self.address)
 
                     cmd, filename = req.payload.decode().split("|")
 
                     print()
 
-                    print(f"Received {cmd} request for '{filename}' from {self.addr}")
+                    print(f"Received {cmd} request for '{filename}' from {self.address}")
 
                     if cmd == "UPLOAD":
                         self.handle_upload(filename)
                     elif cmd == "DOWNLOAD":
                         self.handle_download(filename)
             except TimeoutError:
-                print(f"Connection with {self.addr} timed out, waiting for new connections...")
+                print(f"Connection with {self.address} timed out, waiting for new connections...")
             except ValueError as e:
-                print(f"Received malformed packet from {self.addr}: {e}")
+                print(f"Received malformed packet from {self.address}: {e}")
 
 
 def get_local_address() -> str:
