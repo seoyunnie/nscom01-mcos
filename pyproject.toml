@@ -20,7 +20,7 @@ classifiers = [
 Repository = "https://github.com/seoyunnie/nscom01-mcos.git"
 
 [dependency-groups]
-dev = ["ruff>=0.15.7", "ty>=0.0.24"]
+dev = ["ruff>=0.15.9", "ty>=0.0.28"]
 
 [tool.uv.workspace]
 members = ["mco1"]
