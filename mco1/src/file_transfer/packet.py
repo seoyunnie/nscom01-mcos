@@ -30,15 +30,6 @@ class Packet:
         self.payload_length = len(payload)
         self.payload = payload
 
-    def pack(self) -> bytes:
-        header_base = struct.pack(self.HEADER_BASE_FORMAT, self.type, self.sequence_num, self.payload_length)
-
-        checksum = zlib.crc32(header_base + self.payload) & self.CHECKSUM_MASK
-
-        header = struct.pack(self.HEADER_FORMAT, self.type, self.sequence_num, self.payload_length, checksum)
-
-        return header + self.payload
-
     @classmethod
     def unpack(cls, data: bytes) -> Self:
         if len(data) < cls.HEADER_SIZE:
@@ -59,3 +50,12 @@ class Packet:
             raise ValueError(err_msg)
 
         return cls(PacketType(packet_type), seq_num, payload)
+
+    def pack(self) -> bytes:
+        header_base = struct.pack(self.HEADER_BASE_FORMAT, self.type, self.sequence_num, self.payload_length)
+
+        checksum = zlib.crc32(header_base + self.payload) & self.CHECKSUM_MASK
+
+        header = struct.pack(self.HEADER_FORMAT, self.type, self.sequence_num, self.payload_length, checksum)
+
+        return header + self.payload
