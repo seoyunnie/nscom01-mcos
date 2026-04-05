@@ -3,6 +3,7 @@ import time
 from typing import Final, TypedDict
 
 NTP_EPOCH_OFFSET = 2208988800
+NTP_FRACTION_SCALE = 2**32
 
 RTCP_VERSION = 2
 RTCP_PADDING = 0
@@ -23,7 +24,7 @@ def build_sender_report(ssrc: int, packet_cnt: int, octet_cnt: int, rtp_ts: int)
     now = time.time()
 
     ntp_seconds = int(now) + NTP_EPOCH_OFFSET
-    ntp_frac = int((now % 1) * (2**32))
+    ntp_frac = int((now % 1) * NTP_FRACTION_SCALE)
 
     return struct.pack(
         RTCP_SR_FORMAT,
