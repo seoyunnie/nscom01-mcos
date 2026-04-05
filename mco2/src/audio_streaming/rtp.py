@@ -1,23 +1,23 @@
 import struct
 from typing import Final, Self
 
-PAYLOAD_TYPE_PCMU = 0
+PAYLOAD_TYPE_PCMU: Final = 0
 
-RTP_VERSION = 2
-RTP_PADDING = 0
-RTP_EXTENSION = 0
-RTP_CSRC_COUNT = 0
+RTP_VERSION: Final = 2
+RTP_PADDING: Final = 0
+RTP_EXTENSION: Final = 0
+RTP_CSRC_COUNT: Final = 0
 
-RTP_MARKER = 0
-RTP_PAYLOAD_TYPE = PAYLOAD_TYPE_PCMU
+RTP_MARKER: Final = 0
+RTP_PAYLOAD_TYPE: Final = PAYLOAD_TYPE_PCMU
 
 
 class RTPPacket:
-    HEADER_FORMAT = "!BBHII"
-    HEADER_SIZE: Final[int] = struct.calcsize(HEADER_FORMAT)
+    HEADER_FORMAT: Final = "!BBHII"
+    HEADER_SIZE: Final = struct.calcsize(HEADER_FORMAT)
 
-    FIRST_HEADER_BYTE: Final[int] = (RTP_VERSION << 6) | (RTP_PADDING << 5) | (RTP_EXTENSION << 4) | (RTP_CSRC_COUNT)
-    SECOND_HEADER_BYTE: Final[int] = (RTP_MARKER << 7) | (RTP_PAYLOAD_TYPE)
+    FIRST_HEADER_BYTE: Final = (RTP_VERSION << 6) | (RTP_PADDING << 5) | (RTP_EXTENSION << 4) | (RTP_CSRC_COUNT)
+    SECOND_HEADER_BYTE: Final = (RTP_MARKER << 7) | (RTP_PAYLOAD_TYPE)
 
     sequence_number: int
     timestamp: int

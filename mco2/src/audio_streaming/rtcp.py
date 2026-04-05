@@ -2,22 +2,22 @@ import struct
 import time
 from typing import Final, TypedDict
 
-NTP_EPOCH_OFFSET = 2208988800
-NTP_FRACTION_SCALE = 2**32
+NTP_EPOCH_OFFSET: Final = 2208988800
+NTP_FRACTION_SCALE: Final = 2**32
 
-RTCP_VERSION = 2
-RTCP_PADDING = 0
-RTCP_REPORT_COUNT = 0
+RTCP_VERSION: Final = 2
+RTCP_PADDING: Final = 0
+RTCP_REPORT_COUNT: Final = 0
 
-RTCP_HEADER_FORMAT = "!BBH"
-RTCP_HEADER_SIZE: Final[int] = struct.calcsize(RTCP_HEADER_FORMAT)
+RTCP_HEADER_FORMAT: Final = "!BBH"
+RTCP_HEADER_SIZE: Final = struct.calcsize(RTCP_HEADER_FORMAT)
 
 RTCP_SR_FORMAT = RTCP_HEADER_FORMAT + "IIIIII"
-RTCP_SR_SIZE: Final[int] = struct.calcsize(RTCP_SR_FORMAT)
+RTCP_SR_SIZE: Final = struct.calcsize(RTCP_SR_FORMAT)
 
-RTCP_FIRST_HEADER_BYTE: Final[int] = (RTCP_VERSION << 6) | (RTCP_PADDING << 5) | (RTCP_REPORT_COUNT)
-RTCP_PACKET_TYPE_SR = 200
-RTCP_SR_LENGTH = 6
+RTCP_FIRST_HEADER_BYTE: Final = (RTCP_VERSION << 6) | (RTCP_PADDING << 5) | (RTCP_REPORT_COUNT)
+RTCP_PACKET_TYPE_SR: Final = 200
+RTCP_SR_LENGTH: Final = 6
 
 
 def build_sender_report(ssrc: int, packet_cnt: int, octet_cnt: int, rtp_ts: int) -> bytes:
