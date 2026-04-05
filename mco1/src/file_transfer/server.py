@@ -4,13 +4,14 @@ import argparse
 import os
 import pathlib
 import socket
+from typing import Final
 
 from file_transfer.endpoint import Endpoint
 from file_transfer.packet import Packet, PacketType
 
 
 class Server(Endpoint):
-    FILENAME_PREFIX = "server_"
+    FILENAME_PREFIX: Final = "server_"
 
     def __init__(self, socket: socket.socket) -> None:
         super().__init__(socket)

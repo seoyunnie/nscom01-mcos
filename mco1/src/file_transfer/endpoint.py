@@ -7,11 +7,11 @@ if TYPE_CHECKING:
 
 
 class Endpoint:
-    CHUNK_SIZE = 4096
-    BUFFER_SIZE: Final[int] = CHUNK_SIZE + Packet.HEADER_SIZE
+    CHUNK_SIZE: Final = 4096
+    BUFFER_SIZE: Final = CHUNK_SIZE + Packet.HEADER_SIZE
 
-    TIMEOUT = 2.0
-    MAX_RETRIES = 5
+    TIMEOUT: Final = 2.0
+    MAX_RETRIES: Final = 5
 
     socket: socket.socket
     address: tuple[str, int]
